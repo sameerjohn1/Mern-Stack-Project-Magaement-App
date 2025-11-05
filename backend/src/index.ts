@@ -7,6 +7,8 @@ import connectDatabase from "./config/database.config";
 import { errorHandler } from "./middlewares/errorHandler.middleware";
 import { HTTPSTATUS } from "./config/http.config";
 import { asyncHandler } from "./middlewares/asyncHandler.middleware";
+import { BadRequestException } from "./utils/appError";
+import { ErrorCodeEnum } from "./enums/error-code.enum";
 
 const app=express();
 const BASE_PATH=config.BASE_PATH;
@@ -32,7 +34,7 @@ app.use(cors({
 
 
 app.get("/",asyncHandler(async(req:Request,res:Response,next:NextFunction)=>{
-  
+  throw new BadRequestException("This is a bad request",ErrorCodeEnum.AUTH_INVALID_TOKEN)
     res.status(HTTPSTATUS.OK).json({
         message:"Hello api is working."
     })
@@ -47,5 +49,4 @@ app.listen(config.PORT,async()=>{
     
 })
 
-// 50:00
 // npm run dev
