@@ -45,18 +45,14 @@ export class InternalServerException extends AppError{
 }
 
 
-export class NotFoundException extends AppError{
-  constructor(
-    message:"Resource not found",
-    errorCode?:ErrorCodeEnumType
-  )
-{
+export class NotFoundException extends AppError {
+  constructor(message = "Resource not found", errorCode?: ErrorCodeEnumType) {
     super(
-   message,
+      message,
       HTTPSTATUS.NOT_FOUND,
-            errorCode || ErrorCodeEnum.RESOURCE_NOT_FOUND
-  )
-}
+      errorCode || ErrorCodeEnum.RESOURCE_NOT_FOUND
+    );
+  }
 }
 
 
@@ -71,16 +67,12 @@ export class BadRequestException extends AppError {
 }
 
 
-export class UnaythoorizedException extends AppError{
-  constructor(
-    message:"Unauthorized Access",
-    errorCode?:ErrorCodeEnumType
-  )
-{
+export class UnauthorizedException extends AppError {
+  constructor(message = "Unauthorized Access", errorCode?: ErrorCodeEnumType) {
     super(
-   message,
+      message,
       HTTPSTATUS.UNAUTHORIZED,
-            errorCode || ErrorCodeEnum.ACCESS_UNAUTHORIZED
-  )
-}
+      errorCode || ErrorCodeEnum.ACCESS_UNAUTHORIZED
+    );
+  }
 }
