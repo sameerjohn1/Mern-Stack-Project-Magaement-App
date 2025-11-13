@@ -52,3 +52,17 @@ export const createWorkspaceService = async (
     workspace,
   };
 };
+
+
+
+
+export const getAllWorkspacesUserIsMemberService=async(userId:string)=>{
+  const memberships=await MemberModel.find({userId})
+  .populate("workspaceId")
+  .select("-password")
+  .exec()
+
+  const workspaces=memberships.map((membership)=>membership.workspaceId)
+
+  return {workspaces}
+}
