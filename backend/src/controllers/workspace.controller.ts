@@ -2,8 +2,10 @@ import { Request, Response } from "express";
 import { asyncHandler } from "../middlewares/asyncHandler.middleware";
 import { createWorkspaceSchema, workspaceIdSchema } from "../validation/workspace.validation";
 import { HTTPSTATUS } from "../config/http.config";
-import { createWorkspaceService, getAllWorkspacesUserIsMemberService, getWorkspaceByIdService } from "../services/workspace.service";
+import { createWorkspaceService, getAllWorkspacesUserIsMemberService, getWorkspaceByIdService, getWorkspaceMembersService } from "../services/workspace.service";
 import { getMemberRoleInWorkspace } from "../services/member.service";
+import { Permissions } from "../enums/role.enum";
+import { roleGuard } from "../utils/roleGuard";
 
 
 
@@ -49,6 +51,25 @@ export const getWorkspaceByIdController = asyncHandler(
     return res.status(HTTPSTATUS.OK).json({
       message: "Workspace fetched successfully",
       workspace,
+    });
+  }
+);
+
+
+export const getWorkspaceMembersController = asyncHandler(
+  async (req: Request, res: Response) => {
+    const workspaceId = workspaceIdSchema.parse(req.params.id);
+    const userId = req.user?._id;
+
+    const { role } = await getMemberRoleInWorkspace(userId, workspaceId);
+    roleGuard(role, [Permissions.VIEW_ONLY]);
+
+    const { members, roles } = await getWorkspaceMembersService(workspaceId);
+
+    return res.status(HTTPSTATUS.OK).json({
+      message: "Workspace members retrieved successfully",
+      members,
+      roles,
     });
   }
 );
